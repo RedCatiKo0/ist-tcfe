@@ -1,0 +1,182 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section, the circuit shown in Figure (\ref{fig:1}) is analysed
+theoretically using the node voltage method and the mesh current method.
+
+
+\subsection{Nodal Analysis Method}
+
+To apply the voltage node method we start by numbering each node as in Figure (\ref{fig:1}) and by choosing a ground node - in this case we choose node 8.
+Now we can define 8 node voltages ($V_1$, $V_2$, ..., $V_8$) and proceed with the method by applying KCL (Kirchoff's Current Law)
+in each node that is not connected to a voltage source. From there the ensuing equations follow:
+
+\begin{equation}
+  \frac{V_2 - V_1}{R_1} + \frac{V_2 - V_3}{R_2} + \frac{V_2 - V_5}{R_3} = 0
+  \;\;\;\;\;\;(\textnormal{Node 2})
+  \label{eq:kvl}
+\end{equation}
+
+\begin{equation}
+  \frac{V_3 - V_2}{R_2} - K_b V_b = 0
+  \;\;\;\;\;\;(\textnormal{Node 3})
+  \label{eq:kvl}
+\end{equation}
+
+\begin{equation}
+  \frac{V_6 - V_5}{R_5} + K_b V_b - I_d = 0
+  \;\;\;\;\;\;(\textnormal{Node 6})
+  \label{eq:kvl}
+\end{equation}
+
+\begin{equation}
+  \frac{V_7 - V_4}{R_6} + \frac{V_7 - V_8}{R_7} = 0
+  \;\;\;\;\;\;(\textnormal{Node 7})
+  \label{eq:kvl}
+\end{equation}
+
+Currently we have 10 variables to solve for (node voltages, $I_c$ and $V_b$). We can consider the following 5 additional equations:
+
+\begin{equation}
+    V_8 = 0
+\end{equation}
+
+\begin{equation}
+    V_5 - V_8 = K_c I_c
+\end{equation}
+
+\begin{equation}
+    V_1 - V_4 = V_a
+\end{equation}
+
+\begin{equation}
+    I_c = \frac{(V_7 - V_8)}{R_7}
+\end{equation}
+
+\begin{equation}
+    V_b = V_2 - V_5
+\end{equation}
+
+And by applying KCL in node 4 we can also obtain:
+
+\begin{equation}
+    \frac{V_4 - V_7}{R_6} + \frac{V_4 - V_5}{R_4} + \frac{V_1 - V_2}{R_1} = 0
+\end{equation}
+
+Finally by combining the previous expressions we can write 8 linearly independent equations in matricial form:
+
+\begin{equation}
+  \begin{bmatrix}
+    -\frac{1}{R_1} & \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} & -\frac{1}{R_2} & 0 & -\frac{1}{R_3} & 0 & 0 & 0\\
+    0 & -\frac{1}{R_2} - K_b & \frac{1}{R_2} & 0 & K_b & 0 & 0 & 0\\
+    0 & K_b & 0 & 0 & -\frac{1}{R_5} - K_b & \frac{1}{R_5} & 0 & 0\\
+    0 & 0 & 0 & - \frac{1}{R_6} & 0 & 0 & \frac{1}{R_6} + \frac{1}{R_7} & - \frac{1}{R_7}\\
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+    0 & 0 & 0 & 0 & \frac{1}{K_c} & 0 & - \frac{1}{R_7} & \frac{1}{R_7} - \frac{1}{K_c}\\ 
+    1 & 0 & 0 & -1 & 0 & 0 & 0 & 0\\
+    \frac{1}{R_1} & -\frac{1}{R_1} & 0 & \frac{1}{R_4} + \frac{1}{R_6} & - \frac{1}{R_4} & 0 & - \frac{1}{R_6} & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+    V_1\\
+    V_2\\
+    V_3\\
+    V_4\\
+    V_5\\
+    V_6\\
+    V_7\\
+    V_8
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0\\
+    0\\
+    I_d\\
+    0\\
+    0\\
+    0\\
+    V_a\\
+    0
+  \end{bmatrix}
+\end{equation}
+
+Using Octave to solve the matricial equations and considering that $V_b = V_2 - V_5$ 
+and $I_c = \frac{1}{K_c} V_5 - \frac{1}{K_c} V_8$ we obtain the data in table (\ref{tab:NodalMethod}).
+
+\begin{table}[hbt!]
+  \centering
+  \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{NodalMethod}
+  \end{tabular}
+  \caption{Nodal Method, $V_b$ and $I_c$ obtained from the previous matricial system using Octave.}
+  \label{tab:NodalMethod}
+\end{table}
+
+
+\subsection{Mesh Analysis Method}
+
+We first start by arbitrarily assigning a current flow to each of the circuit's essential meshes - $I_1$, $I_2$, $I_3$ and $I_4$.
+For simplicity's sake, we decided to make the current flow in a counter-clockwise direction in every one of these meshes.
+\\
+We can apply KVL (Kirchoff's Voltage Law) to mesh 1 and mesh 3 to obtain the following expressions:
+
+\begin{equation}
+    R_1 I_1 + R_3 (I_1 - I_2) + R_4 (I_1 - I_3) - V_a = 0
+\end{equation}
+
+\begin{equation}
+    R_7 I_3 + R_6 I_3 + R_4(I_3-I_1) + K_c I_c = 0
+\end{equation}
+
+By inspection (and using Ohm's Law) we can obtain the following additional equations:
+
+\begin{equation}
+    I_4 = - I_d
+\end{equation}
+
+\begin{equation}
+    I_3 = - I_c
+\end{equation}
+
+\begin{equation}
+    I_2 = - I_b = - K_b V_b = - K_b R_3 (I_1 - I_2)
+\end{equation}
+
+Combining the previous equations and writing them in matricial form we obtain:
+
+\begin{equation}
+  \begin{bmatrix}
+    R_1+R_3+R_4 & -R_3 & -R_4 & 0\\
+    -R_4 & 0 & R_7+R_6+R_4-K_c & 0\\
+    0 & 0 & 0 & 1\\
+    K_b R_3 & 1-K_b R_3 & 0 & 0\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    I_1 \\
+    I_2 \\
+    I_3 \\
+    I_4
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    V_a \\
+    0 \\
+    -I_d \\
+    0
+  \end{bmatrix}
+\end{equation}
+
+Using Octave to solve the matricial equations and considering that $V_b = R_3(I_1 - I_2)$ 
+and $I_c = - I_3$ we obtain the data in table (\ref{tab:MeshMethod}).
+
+\begin{table}[hbt!]
+  \centering
+  \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{MeshMethod}
+  \end{tabular}
+  \caption{Mesh Current, $V_b$ and $I_c$ obtained from the previous matricial system using Octave.}
+  \label{tab:MeshMethod}
+\end{table}

@@ -1,0 +1,51 @@
+*
+* NGSPICE simulation script
+* Linear circuit
+*
+
+
+* Forces current values to be saved
+.options savecurrents
+
+
+* Resistors
+
+R1 1 2 1.01258106833K
+R2 2 3 2.01414322128K
+R3 2 5 3.14471800951K
+R4 4 5 4.0512295385K
+R5 5 6 3.04120010333K
+R6 4 7a 2.02925076831K
+R7 0 7b 1.01071894298K
+
+* Independent Sources
+
+Va 1 4 5.2435704532 ; Voltage Source
+Id 0 6 1.0346810568m; Current Source
+Vaux 7a 7b 0        ; Auxiliar Voltage Source
+
+* Dependent Sources
+
+Gb 6 3 2 5 7.06081365014m ; Voltage-Controlled Current Source
+Hc 5 0 Vaux 8.16086836519K; Current-Controlled Voltage Source
+
+
+.control
+
+op
+
+echo "***************"
+echo "Operating Point"
+echo "***************"
+
+echo  "op_TAB"
+print all
+print V(2, 5)
+print I(Vaux)
+echo  "op_END"
+
+quit
+
+.endc
+
+.end

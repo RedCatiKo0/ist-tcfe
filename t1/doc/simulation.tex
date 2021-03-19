@@ -1,0 +1,22 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+
+In table (\ref{tab:sim}) we can find the values obtained by the simulation.
+
+\begin{table}[hbt!]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value [A or V]} \\ \hline
+    \input{op_tab}
+    \end{tabular}
+    \caption{Simulation Results - Variables preceeded by @ are currents in Ampere, while 
+    all the other variables are voltages in Volt}
+    \label{tab:sim}
+\end{table} 
+
+We can see that the values obtained from both theoretical 
+methods (which gave identical results) are the same as the ones that result from the simulation.
+It is worth noting that \emph{v(7a)} and \emph{v(7b)} are just auxilary voltages used to define $I_c$
+in \emph{Ngspice} so that we can simulate the current dependent voltage source $V_c = K_c I_c$ and that
+\emph{v(2,5)} corresponds to $V_b$ and \emph{i(vaux)} to $I_c$.
