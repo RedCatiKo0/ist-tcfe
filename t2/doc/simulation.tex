@@ -1,0 +1,139 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+
+In this section, we simulate the RC circuit in its different stages in time using \emph{Ngspice},
+performing Operating Point Analysis to get the branch currents and node voltages
+in the first two subsections. We also perform a Transient Analysis to get the voltage
+in node 6 and compare it with the stimulus in node 1 in the third and fourth subsections.
+Finally we do an AC Frequency Responce Analysis, in order to compare the Magnitudes
+and Phases of the input source, node 6 and the capacitor.
+
+\subsection{.OP: Circuit when $t < 0 \:s$}
+
+In the table (\ref{tab:SimNodMet}), we display all the branch currents and
+node voltages obtained from the simulation of the circuit ilustrated in figure (\ref{fig:2}). 
+We also present, side by side, the table from section (\ref{se:2.1}) to facilitate comparing results.
+
+\begin{table}[H]
+    \caption{Nodal Method Analysis - $t < 0 \: s$}
+    \begin{minipage}{.5\linewidth}
+
+        \centering
+        \caption{Theoretical Results}
+        \begin{tabular}{|l|r|}
+            \hline    
+            {\bf Quantity} & {\bf Value} \\ \hline
+            \input{Teo1-NodalMethod}
+        \end{tabular}
+
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+
+        \centering
+        \caption{Simulated Results}
+        \begin{tabular}{|l|r|}
+            \hline    
+            {\bf Quantity} & {\bf Value [A or V]} \\ \hline
+            \input{op1_tab}
+        \end{tabular}
+
+    \end{minipage}
+    \label{tab:SimNodMet}
+\end{table}
+
+Comparing the values derived from the theoretical analysis with the simulated ones, we
+can observe that they are very similar, only slightly differing from each other probably
+due to the program's precision.
+
+
+\subsection{.OP: Circuit when $t = 0^{+} \:s$}
+
+In the table below, (\ref{tab:SimEqRes}), we display all the branch currents and
+node voltages obtained from the simulation of the circuit ilustrated in figure (\ref{fig:4}).
+The need for this step is explained in the subsection (\ref{sec:AnalEqRes}) and in this subsection
+we look to confirm the values previously obtained with the theoretical analysis. We once again compare both 
+theoretical results and simulation results side by side.
+
+\begin{table}[H]
+    \caption{Nodal Method Analysis - $t = 0^{+} \: s$}
+    \begin{minipage}{.5\linewidth}
+
+        \centering
+        \caption{Theoretical Results}
+        \begin{tabular}{|l|r|}
+            \hline    
+            {\bf Quantity} & {\bf Value} \\ \hline
+            \input{Teo2-EquivalentResistance}
+        \end{tabular}
+
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+
+        \centering
+        \caption{Simulated Results}
+        \begin{tabular}{|l|r|}
+            \hline
+            {\bf Quantity} & {\bf Value [A or V]} \\ \hline
+            \input{op2_tab}
+        \end{tabular}
+
+    \end{minipage}
+    \label{tab:SimEqRes}
+\end{table}
+
+Similarly to the previous subsection, we can observe that the values from the theoretical analysis
+and the simulated ones are very similar, only slightly differing from each other due to the
+program's precision.
+
+
+\subsection{.TRAN: Natural Solution of the Circuit}
+
+In figure (\ref{fig:SimNatSol}), we ilustrate the natural solution of the circuit in node 6 in
+the interval $t \in [0,20] \: ms$. We can notice both graphs obtained from the theoretical and simulated
+analysis look pretty much the same as expected.
+
+\begin{figure}[H] \centering
+    \includegraphics[width=0.6\linewidth]{trans3.pdf}
+    \caption{Natural Solution of the Voltage at Node 6, $v_{6n}(t)$}
+    \label{fig:SimNatSol}
+\end{figure}
+
+
+
+\subsection{.TRAN: Total Solution of the Circuit}
+
+In figure (\ref{fig:SimTotSol}), we display the first $20 \:ms$ of the voltage in node 6 of the circuit, colored green,
+when subjected to the stimulus, colored red. Once again, both graphs obtained from the theoretical
+and simulated analysis look the same as expected.
+
+\begin{figure}[H] \centering
+    \includegraphics[width=0.6\linewidth]{trans4.pdf}
+    \caption{Total Solution: \textcolor{red}{Red - Voltage Source}; \textcolor{green}{Green - Node 6}}
+    \label{fig:SimTotSol}
+\end{figure}
+
+
+
+\subsection{.AC: Circuit Frequency Response}
+
+In this section, we study the frequency response obtained from an
+AC analysis between $0.1 Hz$ and $1 MHz$, similar to what was done in section (\ref{sec:AnalFRes}).
+\\
+In figure (\ref{fig:FrequencyResponseSim}), we show the magnitudes in decibels (dB) and the phases in degrees
+of the input source voltage (red), of the capacitor
+voltage (green) and of the voltage in node 6 (blue), as a function of the frequency, which is displayed logarithmically
+in the x axis.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{trans5.pdf}
+    \includegraphics[scale=0.35]{trans6.pdf}
+    \caption{Frequency Response - Magnitude and Phase: \textcolor{red}{Red - Voltage Source}; \textcolor{green}{Green - Node 6}; \textcolor{blue}{Blue - Capacitor}}
+    \label{fig:FrequencyResponseSim}
+\end{figure}
+
+By comparing the graphs obtained by simulated and theoretical means, we can once again come to the conclusion that
+both methods produce the same overall results, never producing a noticeable discrepancy.
+\\
+Therefore, because the plots are basically the same, the reasons on why the responses of the elements plotted differ
+from each other can be found in subsection (\ref{sec:AnalFRes}).

@@ -1,0 +1,30 @@
+\clearpage
+
+\section{Introduction}
+\label{sec:introduction}
+
+In this laboratory assignment, we study the circuit ilustrated in the figure (\ref{fig:1}).
+Our objective is to better understand how an RC circuit works and how it responds to certain stimuli.
+More specifically, we studied the circuit in its stationary state ($t < 0 \: s$), as well as how it
+responded to a sine wave with frequency $f$: $v_s(t) = \sin(2 \pi f t)$, when $t > 0 \: s$.
+\\
+In section (\ref{sec:analysis}), we performed a theoretical analysis of the circuit.
+Using the Nodal Method, we described its behavior when $t < 0 \: s$, computed the equivalent
+resistor as seen by the capacitor to obtain the natural solution after $t > 0 \: s$,
+and through the computation of phasor voltages we obtained the forced solution and studied
+the frequency response.
+\\
+In section (\ref{sec:simulation}), we present the results derived from various simulations of the circuit
+that were obtained from \emph{Ngspice} scripts. We simulated the linear circuit when $t < 0 \: s$, the total solution
+when the circuit is subjected to the stimulus and its frequency response.
+Moreover, we also compare the values determined through theoretical methods and the values derived from
+the circuit simulations side by side, explaining why they did or did not differ from one another.
+\\
+Finally, in section (\ref{sec:conclusion}), we sumarize the results of this assignment, namely the
+comparison between the theoretical analysis and the simulation.
+
+\begin{figure}[H] \centering
+    \includegraphics[width=0.7\linewidth]{t2cnormal.pdf}
+    \caption{RC Circuit}
+    \label{fig:1}
+\end{figure}

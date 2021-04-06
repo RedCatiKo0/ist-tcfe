@@ -1,0 +1,40 @@
+*
+* NGSPICE simulation script
+*
+
+
+
+* Forces current values to be saved
+
+.option savecurrents
+
+
+
+* Variables 
+
+.include FirstSimVars.mod
+
+
+
+* Print Values
+
+.control
+
+op
+
+echo "********************************************"
+echo  "Operating point"
+echo "********************************************"
+
+echo  "op1_TAB"
+print i(Vaux)
+print all
+print v(5,8)
+print v(2,5)
+echo  "op1_END"
+
+quit
+
+.endc
+
+.end

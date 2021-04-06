@@ -1,0 +1,66 @@
+*
+* NGSPICE simulation script
+*
+
+
+
+* Variables 
+
+.include FourthSimVars.mod
+
+
+
+* Plot
+
+.control
+
+tran 0.01m 20m
+
+echo "********************************************"
+echo  "Transient analysis"
+echo "********************************************"
+
+set hcopypscolor=1
+set color0=rgb:0/0/0
+set color1=rgb:f/f/f
+set color2=rgb:0/0/f
+set color2=rgb:f/0/0
+set color3=rgb:0/f/0
+set color4=rgb:0/0/f
+
+hardcopy trans4.ps v(1) v(6) xlabel 'Time' ylabel 'Voltage'
+echo trans4_FIG
+
+echo "********************************************"
+echo  "Frequency analysis"
+echo "********************************************"
+
+ac dec 10 0.1 1MEG
+
+let vdbS = vdb(1)
+let vdb6 = vdb(6)
+let vdbC = vdb(6,8)
+
+settype decibel vdbS
+settype decibel vdb6
+settype decibel vdbC
+
+hardcopy trans5.ps vdbS vdb6 vdbC xlimit 0.1 1MEG xlabel 'Frequency' ylabel 'Magnitude'
+echo trans5_FIG
+
+let vpS = 180/PI*vp(1)
+let vp6 = 180/PI*vp(6)
+let vpC = 180/PI*vp(6,8)
+
+settype phase vpS
+settype phase vp6
+settype phase vpC
+
+hardcopy trans6.ps vpS vp6 vpC xlimit 0.1 1MEG xlabel 'Frequency' ylabel 'Phase'
+echo trans6_FIG
+
+quit
+
+.endc
+
+.end

@@ -1,0 +1,322 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section we analyse the circuit shown in Figure (\ref{fig:1}) before and 
+after $t = 0 \:s$ using the theoretical models studied in class.
+
+\subsection{Nodal Analysis Method - $t < 0 \:s$}
+\label{se:2.1}
+
+We start by analysing the stationary regime of the circuit, or in 
+other words, we assume enough time has passed
+so that the capacitor is fully charged.
+The capacitor is described by 
+equation (\ref{eq:CapacitorLaw}).
+
+\begin{equation}
+  i_c = C \frac{d v_c}{dt}
+  \label{eq:CapacitorLaw}
+\end{equation}
+
+Where $i_c$ and $v_c$ are, respectively, the current passing through the capacitor and the voltage at
+it's terminals. Therefore if we are in a stationary situation, that is $v_c = constant$, then $i_c = 0 \: A$. 
+The capacitor has an open circuit behavior which implies the circuit is equivalent to the one 
+in figure (\ref{fig:2}).
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{t2csemcondensador.pdf}
+  \caption{RC Circuit to be analysed with Node Voltages conventions}
+  \label{fig:2}
+\end{figure}
+
+Using the nodal voltage analysis method we can obtain 7 linear equations for $V_1$, $V_2$, $V_3$, $V_5$, $V_6$, $V_7$ and $V_8$,
+which we now present in matricial form.
+
+\begin{equation}
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 & 0 & 0 & 0\\
+    -\frac{1}{R_1} & \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} & - \frac{1}{R_2} & - \frac{1}{R_3} & 0 & 0 & 0\\
+    0 & \frac{1}{R_2} + K_b & - \frac{1}{R_2} & - K_b & 0 & 0 & 0\\
+    0 & - \frac{1}{R_3} & 0 & \frac{1}{R_3} + \frac{1}{R_4} + \frac{1}{R_5} & - \frac{1}{R_5} & - \frac{1}{R_7} & \frac{1}{R_7}\\
+    0 & K_b & 0 & - \frac{1}{R_5} - K_b & \frac{1}{R_5} & 0 & 0\\
+    0 & 0 & 0 & 0 & 0 & \frac{1}{R_6} + \frac{1}{R_7}  & - \frac{1}{R_7} &\\ 
+    0 & 0 & 0 & 1 & 0 & \frac{K_d}{R_6} & -1\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    V_1\\
+    V_2\\
+    V_3\\
+    V_5\\
+    V_6\\
+    V_7\\
+    V_8
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    V_s\\
+    0\\
+    0\\
+    0\\
+    0\\
+    0\\
+    0
+  \end{bmatrix}
+\end{equation}
+
+By solving this equations using \emph{Octave} we obtained the values in table (\ref{tab:Teo1}).
+In this table we also present the values for the currents in all branches, $I_{Rn}$, in the direction
+defined as from the lower to the higher numbered node, in order to match the ones calculated in 
+\emph{Ngspice}, as well as $V_b$ and $V_d$.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{Teo1-NodalMethod}
+    \end{tabular}
+    \caption{Nodal Analysis Results - $t < 0 \:s$}
+    \label{tab:Teo1}
+\end{table} 
+
+
+
+\subsection{Equivalent Resistance, $R_{eq}$}
+\label{sec:AnalEqRes}
+
+In this section we want do determine the equivalent resistance, $R_{eq}$, of the circuit
+as seen from the capacitor terminals. To do this we consider the Thévenin equivalent of
+the circuit as seen in figure (\ref{fig:3}). 
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{t2thev.pdf}
+  \caption{Thévenin Equivalent Circuit}
+  \label{fig:3}
+\end{figure}
+
+To calculate the equivalent resistance we turn off all independent sources in the circuit. This 
+corresponds to replacing the voltage source in the Thévenin equivalent with a short circuit.
+Therefore, by replacing the capacitor with a voltage source that imposes a voltage $V_x = V_6 - V_8$, where
+$V_6$ and $V_8$ are the nodal voltages determined in the previous section we have a simple way to calculate $R_{eq}$.
+We only need to determine $I_x$, that is, the current that is supplied by the voltage source $V_x$ to the equivalent
+resistance. By doing this, we can use Ohm's Law to determine $R_{eq} = \frac{V_x}{I_x}$.
+\\
+All this considered, to calculate $I_x$ we use nodal analysis in the circuit presented in figure (\ref{fig:4}).
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{t2csemfontetensao.pdf}
+  \caption{Circuit to be analysed with Node Voltages conventions}
+  \label{fig:4}
+\end{figure} 
+
+This whole procedure is necessary due to the fact that the circuit in question has several resistances and two dependent sources which complicates
+the calculation of $R_{eq}$. Furthermore it is useful to use $V_x = V_6 - V_8$ because by doing so, we will not only determine the equivalent resistance, $R_{eq}$,
+but also calculate the nodal voltages of all nodes in instant $t = 0^{+} \: s$. This is a result of the fact that
+$v_s(0^{+}) = 0\: V$ (at that instant the voltage source is equivalent to a wire) and that the voltage of the capacitor is continuous at $t = 0$ which implies that $v_6(0^{+}) - v_8(0^{+}) = V_x$.
+\\
+The equations correspondent to the nodal analysis are presented in matricial form bellow:
+
+\begin{equation}
+  \begin{bmatrix}
+    \frac{1}{R_2} + \frac{1}{R_3} + \frac{1}{R_4} & - \frac{1}{R_2} & - \frac{1}{R_3} & 0 & 0 & 0\\
+    \frac{1}{R_2} + K_b & - \frac{1}{R_2} & - K_b & 0 & 0 & 0\\
+    0 & 0 & 1 & 0 & \frac{K_d}{R_6} & -1\\
+    0 & 0 & 0 & 1 & 0 & - 1\\
+    0 & 0 & 0 & 0 & \frac{1}{R_6} + \frac{1}{R_7} & - \frac{1}{R_7}\\
+    -\frac{1}{R_3} + K_b & 0 & \frac{1}{R_3} + \frac{1}{R_4} - K_b & 0 & -\frac{1}{R_7} & \frac{1}{R_7} \\ 
+  \end{bmatrix}
+  \begin{bmatrix}
+    V_2\\
+    V_3\\
+    V_5\\
+    V_6\\
+    V_7\\
+    V_8
+
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0\\
+    0\\
+    0\\
+    V_x\\
+    0\\
+    0
+  \end{bmatrix}
+\end{equation}
+
+The equivalent current can be calculated using expression (\ref{eq:Ix}).
+
+\begin{equation}
+  I_x = \frac{V_6 - V_5}{R_5} + I_b
+  \label{eq:Ix}
+\end{equation}
+
+We can also calculate the time constant associated to the circuit:
+
+\begin{equation}
+  \tau = R_{eq} C
+  \label{eq:TimeConstant}
+\end{equation}
+
+Where C is the capacitor's capacity.
+Solving the system of equations above and by using expressions (\ref{eq:Ix}) and (\ref{eq:TimeConstant})
+we obtained the values in table (\ref{tab:Teo2}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{Teo2-EquivalentResistance}
+    \end{tabular}
+    \caption{Nodal Analysis Results - $t = 0^{+} \:s$}
+    \label{tab:Teo2}
+\end{table}
+
+
+\subsection{Natural Solution, $v_{6n}(t)$ when $t > 0 \:s$}
+
+In this section we determine the natural solution for the voltage at node 6 after $t > 0 \:s$.
+From the theory classes we know the general formula for the voltage of an RC circuit. 
+Therefore considering the circuit in figure (\ref{fig:1}) we know that the natural solution for the voltage in node 6 
+will be given by an expression of the form:
+
+\begin{equation}
+  v_{6n} = v_{6n}(0) e^{-\frac{t}{\tau}}
+  \label{eq:NaturalSolutionExpression}
+\end{equation}
+
+Considering the results obtained in the previous section we know that $v_{6}(0^{+}) - v_{8}(0^{+}) = V_x$ and that $v_{8}(0^{+}) = 0 \:V$.
+\\
+Therefore the natural solution for the voltage in node 6 is given by:
+
+\begin{equation}
+  v_{6n} = 8.824136 e^{-\frac{t}{3.146672 \times 10^{-3}}}
+  \label{eq:NaturalSolution}
+\end{equation}
+
+The solution is plotted in figure (\ref{fig:NaturalSolution}) for the interval $[0, 20] \:ms$.
+
+\begin{figure}[H] \centering
+\includegraphics[width=0.8\linewidth]{NaturalSolution.eps}
+\caption{Natural Solution of the Voltage at Node 6, $v_{6n}(t)$}
+\label{fig:NaturalSolution}
+\end{figure}
+
+
+\subsection{Forced Solution, $v_{6f}(t)$ when $t > 0 \:s$}
+
+In this section we determine the forced solution for the voltage at node 6 with $t > 0 \: s$
+To do so we consider once again the circuit shown in figure (\ref{fig:1}).
+
+Using node analysis with phasors we can determine the node amplitude and phase for each one of the nodes in the circuit
+considering only the forced regime.
+Taking into acount Ohm's Law using impedances and that $Z_C = \frac{1}{j \omega C}$ for capacitors and $Z_R = R$ 
+for resistances we obtain the following equations in matricial form:
+
+\begin{equation}
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 & 0 & 0 & 0\\
+    -\frac{1}{R_1} & \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} & - \frac{1}{R_2} & -\frac{1}{R_3} & 0 & 0 & 0\\
+    0 & \frac{1}{R_2} + K_b & -\frac{1}{R_2} & -K_b & 0 & 0 & 0\\
+    0 & 0 & 0 & 1 & 0 & \frac{K_d}{R_6} & - 1\\
+    0 & K_b & 0 & -K_b - \frac{1}{R_5} & \frac{1}{R_5} + j \omega C & 0 & - j \omega C\\
+    0 & 0 & 0 & 0 & 0 & \frac{1}{R_6} + \frac{1}{R_7} & -\frac{1}{R_7} \\ 
+    0 & -\frac{1}{R_3} & 0 & \frac{1}{R_3} + \frac{1}{R_4} + \frac{1}{R_5} & - j \omega C - \frac{1}{R_5} & -\frac{1}{R_7} & \frac{1}{R_7} + j \omega C \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    \widetilde{V_1}\\
+    \widetilde{V_2}\\
+    \widetilde{V_3}\\
+    \widetilde{V_5}\\
+    \widetilde{V_6}\\
+    \widetilde{V_7}\\
+    \widetilde{V_8}
+
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \widetilde{V_s}\\
+    0\\
+    0\\
+    0\\
+    0\\
+    0\\
+    0
+  \end{bmatrix}
+\end{equation}
+
+Where $\widetilde{V_s} = - j$ is the phasor of the voltage source $v_s$.
+\\
+Using \emph{Octave} we can solve the system above and obtain the corresponding amplitudes for the nodal phasors which
+are presented in table (\ref{tab:Teo3}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{Teo3-ForcedSolution}
+    \end{tabular}
+    \caption{Forced Solution - Magnitude of Voltage Node Phasors}
+    \label{tab:Teo3}
+\end{table} 
+
+Considering $\omega = 2 \pi f$ with a linear frequency of $f = 1 \:kHz$ we can determine the forced solution on node 6, $v_{6f}$,
+by taking the real part of $\widetilde{V_6} \cdot e^{\omega t}$. In figure (\ref{fig:ForcedSolution}) we plot the forced solution in the interval $[0, 20] \: ms$.
+
+\begin{figure}[H] \centering
+\includegraphics[width=0.8\linewidth]{ForcedSolution.eps}
+\caption{Forced Solution of the Voltage at Node 6, $v_{6f}(t)$}
+\label{fig:ForcedSolution}
+\end{figure}
+
+\subsection{Total Solution}
+
+In this section we determine the total solution of the voltage at node 6 for values $t > 0 \:s$
+by superimposing the natural and forced solutions calculated previously. 
+To compare the results with the behavior of the voltage source $v_s$ 
+we plot both $v_s(t)$ and $v_6(t)$ in the interval $[-5, 20] \:ms$.
+The values of $v_6(t)$ when $t < 0 \: s$ correspond to the ones calculated in section (\ref{se:2.1}). 
+The plot in question is presented in figure (\ref{fig:TotalSolution}).
+\\
+We can see that the difference between the phases of the two graphs is approximately $\pi$, this result will be confirmed in the next section.
+
+\begin{figure}[H] \centering
+\includegraphics[width=0.8\linewidth]{TotalSolution.eps}
+\caption{\textcolor{green}{Green - Total Solution of the Voltage at Node 6 ($v_6(t)$)} and \textcolor{red}{Red - Voltage Source ($v_s(t)$)} plots with $t \in [-5, 20] \: ms$}
+\label{fig:TotalSolution}
+\end{figure}
+
+
+
+\subsection{Frequency Responses}
+\label{sec:AnalFRes}
+
+In this section we analyse the frequency responses of $v_c(f) = v_6(f) - v_8(f)$, $v_6(f)$ and $v_s(f)$ for the 
+frequency range $f \in [0.1, 10^6] \:Hz$.
+\\
+Using \emph{Octave} we solved symbolically the nodal method analysis equations for the forced regime.
+By doing so we obtained expressions for each nodal voltage phasor as a function of $f$. From there we just divided 
+the phasor in question ($\widetilde{V_c}$, $\widetilde{V_6}$ or $\widetilde{V_s}$) by $\widetilde{V_s}$ to obtain
+the transformation function. 
+\\
+The absolute value of the transformation functions in decibels and their phase's in degrees
+are plotted in graph (\ref{fig:FrequencyResponseAna}).
+\\
+When analysing the magnitudes we can see that the transformation function yields a magnitude of 1 ($0\: dB$) for $v_s$, this is obviously
+a trivial case. On the other hand, we can see that the transformation function regarding the voltage of the capacitator goes to 0 ($-\infty\: dB$)
+as the frequency goes to infinity. This means that the capacitor only let's through lower frequencies which is 
+coherent with what we have seen in theory classes.
+\\
+As the frequency tends to infinity the capacitor starts to have the behaviour of a short-circuit therefore the capacitor acts in a similar fashion to a regular
+wire which explains why the magnitude of $v_6(f)$ assumes a stationary value.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.38]{FrequencyResponseMag.eps}
+    \includegraphics[scale=0.38]{FrequencyResponsePhase.eps}
+    \caption{Frequency Response - Magnitude and Phase: \textcolor{red}{Red - Voltage Source}; \textcolor{green}{Green - Node 6}; \textcolor{blue}{Blue - Capacitor}}
+    \label{fig:FrequencyResponseAna}
+\end{figure}
