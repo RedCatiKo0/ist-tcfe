@@ -1,0 +1,101 @@
+\section{Simulação do Circuito}
+\label{sec:simulation}
+
+Nesta secção, simulámos o circuito que criámos, ilustrado na figura (\ref{fig:circuito}), usando o \emph{Ngspice}.
+É de notar que a resistência entitulada de \emph{Load} não está efetivamente incluida no circuito simulado
+e corresponde apenas à resistência de um aparelho genérico ligado à corrente DC. Para além disso, não se simulou o
+transformador, colocando apenas uma fonte de tensão alternada, $v_{in}$, com a amplitude pretendida, $A = 23 \: V$,
+considerando-se o número de espiras $n = 10$.
+\\
+A simulação realizada correspondeu a uma análise transiente do circuito durante 10 períodos, ou $200 \: ms$, com um
+passo temporal de $\Delta t = 0.2 ms$, de modo a recolher $1000$ pontos. Esta permitiu
+obter a voltagem média de \emph{output} e a \emph{voltage ripple}, onde este último valor corresponde à diferença entre os valores máximos
+e mínimos da voltagem no \emph{output}. As grandezas em causa encontram-se apresentadas na tabela (\ref{tab:SimValues}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantidade} & {\bf Valor (V, $\Omega$)} \\ \hline
+    \input{CircuitSim_tab}
+    \end{tabular}
+    \caption{Valores obtidos através da simulação de Ngspice; Por ordem: $V_O$, $ripple(v_O)$, $V_{ON}$ e $r_d$}
+    \label{tab:SimValues}
+\end{table}
+
+
+Também se obtiveram os valores para $V_{ON}$ e $r_d$ que foram utilizados na secção (\ref{sec:analysis}. O primeiro foi considerado a média da voltagem medida
+nos terminais de um diodo, neste caso $D_5$. O segundo foi calculado como sendo a razão das amplitudes de oscilação da voltagem medida
+nos terminais de um diodo e da corrente que passa num diodo, neste caso $D_5$.
+\\
+Por comparação dos valores das tabelas (\ref{tab:TeoValues}) e (\ref{tab:SimValues}), nota-se que os valores da voltagem de output ($V_O$ ou mean(v(4,3))) são idênticos,
+o que confirma que a voltagem de output oscila em torno desse valor, tal como previsto no método de \emph{incremental analysis}, utilizado na na secção \ref{sec:analysis}.
+No entanto, apesar dos valores do ripple ($Ripple(v_O)$ ou (maximum(v(4,5)) - minimum(v(4,5))) / (maximum(i(Vaux)) - minimum(i(Vaux)))) serem consistentes já que apresentam
+a mesma ordem de grandeza, têm um desvio percentual de $\epsilon_{Ripple(v_O)} = 53 \%$, o que poderá em parte decorrer de uma medição pouco rigorosa da resistência
+incremental, $r_d$, mas dever-se-à também à utilização de um modelo linear na análise teórica que não reflete na totalidade o comportamento do díodo.
+\\
+\\
+Da simulação também se obtiveram os gráficos (\ref{fig:SimEnvelopeDetector}) e (\ref{fig:SimVoltageRegulator}) correspondentes às voltagens de \emph{output}
+no \emph{Envelope Detector} e no \emph{Voltage Regulator}.
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{envelope_detector_output.pdf}
+  \caption{Voltagem no \emph{Envelope Detector} - Simulação}
+  \label{fig:SimEnvelopeDetector}
+\end{figure}
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{voltage_regulator_output.pdf}
+  \caption{Voltagem no \emph{Voltage Regulator} - Voltagem Output do Circuito - Simulação}
+  \label{fig:SimVoltageRegulator}
+\end{figure}
+
+Por fim, realizou-se ainda um \emph{plot} do desvio da voltagem de \emph{output} do circuito aos 12 V, ou seja,
+de $v_O - 12$ de forma a verificar o quão próximo é a tensão à saída de uma tensão DC ideal. O gráfico em causa corresponde à figura (\ref{fig:SimDeviation}).
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{output_deviation.pdf}
+  \caption{Desvio da voltagem de Output face aos 12 V - Simulação}
+  \label{fig:SimDeviation}
+\end{figure}
+
+Por observação dos gráficos obtidos e por comparação com os gráficos da secção da análise teórica, secção (\ref{sec:analysis}), nota-se que estes são semelhantes,
+nomeadamente que oscilam em torno de valores próximos, $V_E \approx 20 \: V$, no caso dos gráficos da voltagem no \emph{Envelope Detector}, e que são idênticos, $V_O \approx 12 \: V$,
+no caso dos gráficos da voltagem no \emph{Voltage Regulator}.
+\\
+Refere-se novamente que as diferenças entre o modelo teórico e a simulação, neste caso o facto das amplitudes de oscilação serem diferentes, que deverá ser consequência em grande parte
+de na análise teórica ter-se considerado o modelo do díodo ideal, sem resistência interna com corrente nula para $V_D < V_{ON}$ e tensão constante $V_D = V_{ON}$ quando ligado, 
+pelo que assim não é tido em conta grande parte do comportamento não linear do díodo que é relevante no modelo mais complexo e mais realista utilizado na simulação pelo \emph{Ngspice}.
+\\
+Pode-se constatar, portanto, que os resultados obtidos na análise teórica e na simulação são compatíveis, apresentando apenas algumas pequenas diferenças no
+efeito de \emph{rippling} devidas provavelmente à simplicidade do modelo do díodo utilizado na análise teórica e ainda devido à aproximação linear resultante do método da análise incremental.
+
+
+
+\section{Cálculo da Figura de Mérito}
+\label{sec:Merit}
+
+A fórmula utilizada para o cálculo do mérito neste trabalho é dada pela expressão (\ref{eq:Merito}).
+
+\begin{equation}
+    M = \frac{1}{\textnormal{cost} * (\textnormal{ripple($v_O$)} + \textnormal{average($v_O$ - 12)} + 10^{-6})}
+    \label{eq:Merito}
+\end{equation}
+
+No circuito desenvolvido neste trabalho utilizaram-se: 22 díodos, 1 condensador ($C = 3.1\: \mu F$) e 1 resistência ($R = 4.9 k\Omega$). 
+Assim o custo associado a este circuito (nas unidades monetárias adotadas) é de:
+
+\begin{equation}
+  \label{eq:Custo}
+  \textnormal{cost} = 22 \times 0.1 + 3.1 \times 1 + 4.9 \times 1 = 10.2 MU 
+\end{equation}
+
+Considerando o valor do custo, e o valor médio de $v_O$, $average(v_O) = 12.00071 V$, e da \emph{ripple},
+$\textnormal{\emph{ripple}} = 2.245060 \times 10^{-1} \:V$, retirados da tabela (\ref{tab:SimValues})
+podemos calcular o mérito deste trabalho obtendo-se:
+
+\begin{equation}
+  \label{eq:ValorMerito}
+  M = 0.4353100 
+\end{equation}
+

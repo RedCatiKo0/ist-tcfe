@@ -1,0 +1,136 @@
+\section{Análise Teórica}
+\label{sec:analysis}
+
+% FALTAM AS TABELAS DE OCTAVE COM OS VALORES QUE SÃO PEDIDOS NO PP
+
+\subsection{Estudo do \emph{Envelope Detector}}
+
+Começámos por estudar o \emph{Envelope Detector} utilizado. Este é constituído por um \emph{Full-Wave Bridge Rectifier}
+em paralelo com um condensador, com capacidade $C_1 = 3.1 \: \mu F$ e por uma resistência $R_1 = 4.9 k \Omega$
+e tem como função aproximar a corrente alterna a corrente contínua.
+\\
+Como visto nas aulas teóricas, sabemos que a tensão de output de um \emph{Full-Wave Bridge Rectifier} corresponde ao módulo da tensão
+da fonte alternada, que neste caso corresponde à tensão imposta no transformador, ou seja,
+$v_R = |1 / 10 \: v_{AC}| = |A\: cos(\omega t)| :\ V$, em que $A = 23 \: V$, $\omega = 2 \pi f$ e $f = 50 \: Hz$,
+onde supomos que a tensão imposta pelo transformador é superior a $V_{ON}$, ou seja, à tensão a partir da qual circula corrente através dos díodos 
+- consideramos um modelo teórico dos díodos onde supomos que só circula corrente para $V > V_{ON}$.
+\\
+Assim, a tensão no output para $0 < t < \pi / 2 \omega$ é dada por $v_E = A cos(\omega t) \:V$,
+onde supomos novamente que os díodos estão ligados. De seguida, apresentam-se um conjunto de expressões úteis para o
+estudo do \emph{Envelope Detector}, onde $i_d$ é a corrente que passa pelos díodos, $i_R$ a corrente na resistência
+e $i_C$ a corrente no condensador e onde se considerou o intervalo $0 < t < \pi / 2 \omega$ (cosseno positivo):
+
+\begin{equation}
+    i_d = i_R + i_C
+\end{equation}
+
+\begin{equation}
+    i_C = C_1 \frac{dv_E}{dt} = - C_1 A \omega sin(\omega t)
+\end{equation}
+
+\begin{equation}
+    i_R = \frac{v_E}{R_1}
+\end{equation}
+
+De forma semelhante ao estudo realizado em aula, procuramos descobrir o instante $t_{OFF}$ em que a corrente 
+que passa pelo díodo é nula (díodo desligado). Utilizando as expressões anteriores e impondo a condição $i_d = 0$ obtém-se:
+
+\begin{equation}
+    t_{OFF} = \frac{1}{\omega} atan(\frac{1}{\omega R_1 C_1})
+\end{equation}
+
+Para $t > t_{OFF}$ o condensador descarrega sobre $R_1$ já que não passa corrente pelos díodos,
+pelo que a voltagem de output do \emph{Envelope Detector} é dada pela expressão:
+
+\begin{equation}
+    v_E(t) = A cos(\omega t_{OFF}) e^{-\frac{t - t_{OFF}}{R_1 C_1}}
+\end{equation}
+
+O díodo volta a ligar-se quando a função dada pela expressão anterior interseta a voltagem normal do \emph{Full-Wave}.
+Por fim, através das expressões anteriores e replicando o comportamento do circuito para 10 períodos,
+efetuou-se um \emph{plot} da voltagem de output do \emph{Envelope Detector} que se encontra 
+na figura (\ref{fig:TeoEnvelopeDetector}).
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{venvlope.eps}
+  \caption{Voltagem no \textcolor{red}{\emph{Envelope Detector}} e no \textcolor{blue}{\emph{Full-Wave Bridge Rectifier}} - Análise Teórica}
+  \label{fig:TeoEnvelopeDetector}
+\end{figure}
+
+Como é vísivel no gráfico da figura (\ref{fig:TeoEnvelopeDetector}), o \emph{Envelope Detector} transforma a corrente alternada em corrente
+aproximadamente continua, verificando-se no entanto que existe ainda uma oscilação significativa da tensão - \emph{rippling}.
+Este efeito será minimizado pelo \emph{Voltage Regulator} que estudamos de seguida.
+
+
+
+\subsection{Estudo do \emph{Voltage Regulator}}
+
+O \emph{Voltage Regulator} utilizado neste trabalho é constítuido por 18 díodos ligados em série - cujos modelos correspondem ao
+\emph{default} do \emph{Ngspice}, ver secção (\ref{sec:simulation}) - e por uma resistência $R_1 = 4.9 \:k\Omega$, tendo como
+objetivo atenuar o \emph{rippling} referido anteriormente.
+\\
+Analisou-se o \emph{Voltage Regulator} por análise incremental (\emph{Incremental Analysis}), dividindo o estudo da
+voltagem de output, $v_O$, nas suas componentes DC, $V_O$, e AC, $v_o(t)$, de acordo com a expressão (\ref{eq:DCACAnalysis}).
+É de notar que idealmente teríamos $V_O = 12 \: V$ e $v_o(t) = 0 \: V$.
+
+\begin{equation}
+    \label{eq:DCACAnalysis}
+    v_O = V_O + v_o(t)
+\end{equation}
+
+De forma a realizar este tipo de análise, foi necessário determinar a resistência incremental dos díodos utilizados, $r_d$, bem 
+como a voltagem $V_{ON}$, cujos valores se encontram na tabela (\ref{tab:SimValues}). Estes valores foram obtidos através de um
+\emph{script} de \emph{Ngspice} e serão, portanto, discutidos na secção \ref{sec:simulation}.
+\\
+A componente DC foi obtida através de \emph{Operating Point Analysis}. Neste caso, os díodos correspondem a fontes de tensão
+independentes em série com voltagem $V_{ON}$, pelo que consideramos que a componente DC de output do circuito corresponderá
+a $V_O = n V_{ON}$.
+\\
+Na análise da componente AC, o problema reduz-se a um divisor de tensões:
+
+\begin{equation}
+    v_o(t) = \frac{n r_d}{n r_d + R} v_e(t)
+\end{equation}
+
+Onde $v_e(t)$ corresponde à componente AC do \emph{Envelope Detector}, ou seja, à voltagem de output do \emph{Envelope Detector}
+subtraida pela sua média (componente DC).
+\\
+Assim, é de esperar que o output do conversor AC-DC desenvolvido seja dado por:
+
+\begin{equation}
+   v_O = n V_{ON} + \frac{n r_d}{n r_d + R} (v_E - V_E)
+   \label{eq:OutputVoltageTeo}
+\end{equation}
+
+Os valores obtidos para a componente DC, $V_O$, e do ripple, $Ripple(v_O)$, da voltagem de output do \emph{Voltage Regulator} estão apresentados
+na seguinte tabela (\ref{tab:TeoValues}):
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline
+    \input{TeoIncrementalAnalysis.tex}
+    \end{tabular}
+    \caption{Valores obtidos através da análise teórica;}
+    \label{tab:TeoValues}
+  \end{table}
+
+O \emph{plot} da voltagem de output do circuito, $v_O$, durante 10 períodos, corresponde à figura (\ref{fig:TeoVoltageRegulator}).
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{volreg.eps}
+  \caption{Voltagem no \emph{Voltage Regulator} - Voltagem Output do Circuito - Análise Teórica}
+  \label{fig:TeoVoltageRegulator}
+\end{figure}
+
+Podemos verificar uma diminuição de fenómenos de \emph{voltage rippling}, o que resulta do facto de $R >> r_d$ (ver equação (\ref{eq:OutputVoltageTeo})), pelo que a função
+do \emph{voltage regulator} é assim cumprida.
+\\
+Por último, fez-se ainda um \emph{plot} do desvio da voltagem de output face aos $12 \: V$ esperados que se apresenta na figura (\ref{fig:TeoDeviation}).
+Podemos verificar que a voltagem de output é bastante próxima de corrente DC com flutuações pequenas face aos 12 V.
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{outdev.eps}
+  \caption{Desvio da voltagem de Output face aos 12 V - Simulação}
+  \label{fig:TeoDeviation}
+\end{figure}

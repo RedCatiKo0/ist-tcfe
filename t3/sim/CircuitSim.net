@@ -1,0 +1,73 @@
+*
+* NGSPICE simulation script
+*
+
+* Components
+
+.model Default D
+
+Vin  1 0  0.0 ac 1.0 sin(0 23 50 0 0 270); n = 10
+Vaux 5 22 0
+
+D1 3 1 Default
+D2 1 2 Default
+D3 0 2 Default
+D4 3 0 Default
+
+C1 2 3 3.1u
+
+R1 2 4 4.9K
+
+D5  4  5  Default
+D6  22 6  Default
+D7  6  7  Default
+D8  7  8  Default
+D9  8  9  Default
+D10 9  10 Default
+D11 10 11 Default
+D12 11 12 Default
+D13 12 13 Default
+D14 13 14 Default
+D15 14 15 Default
+D16 15 16 Default
+D17 16 17 Default
+D18 17 18 Default
+D19 18 19 Default
+D20 19 20 Default
+D21 20 21 Default
+D22 21 3  Default
+
+* Plot
+
+.control
+
+tran 0.2m 200m
+
+echo "********************************************"
+echo  "Transient analysis"
+echo "********************************************"
+
+set hcopypscolor=1
+set color0=rgb:0/0/0
+set color1=rgb:f/f/f
+set color2=rgb:f/0/0
+
+echo  "CircuitSim_TAB"
+print mean(v(4,3))
+print maximum(v(4,3)) - minimum(v(4,3))
+print mean(v(4,5))
+print (maximum(v(4,5)) - minimum(v(4,5))) / (maximum(i(Vaux)) - minimum(i(Vaux)))
+echo  "CircuitSim_END"
+
+hardcopy envelope_detector_output.ps v(2,3) xlabel 'Time' ylabel 'Voltage'
+echo envelope_detector_output_FIG
+hardcopy voltage_regulator_output.ps v(4,3) xlabel 'Time' ylabel 'Voltage'
+echo voltage_regulator_output_FIG
+hardcopy output_deviation.ps (v(4,3) - 12) xlabel 'Time' ylabel 'Voltage'
+echo output_deviation_FIG
+
+quit
+
+.endc
+
+.end
