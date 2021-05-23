@@ -1,0 +1,385 @@
+\section{Análise Teórica}
+\label{sec:analysis}
+
+\subsection{\emph{Operating Point}}
+
+Nesta secção do trabalho, estudamos a parte DC do circuito. Para tal, realizámos um \emph{Operating Point} em
+ambos os subcircuitos \emph{Gain Stage} e \emph{Output Stage} separadamente.
+
+\subsubsection{\emph{Gain Stage}}
+
+Começamos por analisar o subcircuito \emph{Gain Stage}, tal como apresentado no esquema elétrico da Figura
+(\ref{fig:Circuito}). Para calcular o \emph{Operating Point}, não é necessário considerar os condensadores, já que para
+$\omega = 0$ temos $Z_C = 1/(j \omega C) = +\infty$, ou seja, estes comportam-se como um circuito aberto.
+\\
+Isto permite-nos ainda simplificar o circuito através da utilização de um equivalente de Thévenin.
+\\
+Tendo em conta estas simplificações podemos obter as seguintes expressões para grandezas de interesse (derivadas e
+explicadas na aula teórica 17). Em primeiro lugar, apresentam-se as expressões correspondentes ao equivalente
+de Thévenin do \emph{Bias Circuit}:
+
+\begin{equation}
+  \label{eq:RB}
+  R_B = \frac{R_{B_1} R_{B_2}}{R_{B_1} + R_{B_2}}
+\end{equation}
+
+\begin{equation}
+  \label{eq:Veq}
+  V_{eq} = - \frac{R_{B_2}}{R_{B_1} + R_{B_2}} V_{CC}
+\end{equation}
+
+De seguida, apresentam-se as expressões correspondentes às correntes no circuito e às voltagens resultantes da
+aplicação de KVL nas malhas e da utilização da lei de Ohm nas resistências e das relações entre as correntes no
+transistor NPN:
+
+\begin{equation}
+  \label{eq:IE}
+  I_E = (1 + \beta_F) I_B
+\end{equation}
+
+\begin{equation}
+  \label{eq:IB}
+  I_B = \frac{V_{eq} - V_{ON}}{R_B + (1 + \beta_F) R_E}
+\end{equation}
+
+\begin{equation}
+  \label{eq:IC}
+  I_C = \beta_F I_B
+\end{equation}
+
+\begin{equation}
+  \label{eq:VO}
+  V_{O_1} = V_{CC} - R_C I_C 
+\end{equation}
+
+\begin{equation}
+  \label{eq:VE}
+  V_E = R_E I_E
+\end{equation}
+
+Onde $I_B$ e $I_C$ são as correntes que entram na base e no coletor do transistor, respetivamente, enquanto que $I_E$ é a corrente
+que sai do emissor. Nota-se ainda que $V_E$ corresponde à tensão na resistência $R_E$ no sentido de $I_E$ e $V_{O1}$ à diferença de potencial
+entre o coletor do transistor e o \emph{ground} (ver figura (\ref{fig:Circuito})).
+\\
+Podemos calcular ainda a tensão entre o coletor e o emissor do transistor NPN, $V_{CE}$, através da seguinte expressão:
+
+\begin{equation}
+  \label{eq:VCE}
+  V_{CE} = V_{O_1} - V_E 
+\end{equation}
+
+Isto permite verificar se o transistor se encontra a funcionar na região ativa direta (\emph{Forward Active Region}),
+já que nesta situação temos $V_{CE} > V_{BE_{ON}}$. Assim, utilizando as expressões anteriores e recorrendo ao
+\emph{Octave}, calcularam-se as grandezas características do \emph{Gain Stage} na situação de \emph{Operating Point},
+para o mesmo circuito utilizado na simulação. Os valores apresentam-se na tabela (\ref{tab:Teo-OP-GainStage}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{OP-GainStage}
+    \end{tabular}
+    \caption{Análise de \emph{Operating Point} - \emph{Gain Stage}}
+    \label{tab:Teo-OP-GainStage}
+\end{table} 
+
+Assim, podemos confirmar que $V_{CE} > V_{BE_{ON}} = 0.7 \: V$ pelo que o transistor está a funcionar na região adequada
+para o funcionamento de um amplificador - o que resulta da utilização do \emph{Bias Circuit}.
+\\
+Comparando os valores da tabela (\ref{tab:Teo-OP-GainStage}) com os obtidos na simulação, tabelados em (\ref{tab:OPSimValues}),
+podemos observar que apesar de os resultados diferirem um pouco, têm a mesma ordem de grandeza o que nos permite estabelecer
+as mesmas conclusões para os dois métodos (Transistor NPN na região ativa direta). As diferenças entre os valores devem-se
+principalmente do facto de termos utilizado o modelo linear do transistor na análise teórica invês de um modelo mais complexo como é o caso
+do utilizado pelo \emph{Ngspice}.
+
+
+\subsubsection{\emph{Output Stage}}
+
+Tal como anterioremente, nesta secção procura-se determinar um regime de \emph{Operating Point}, mas para o \emph{Output
+Stage}. Temos novamente em conta que no \emph{Operating Point} os condensadores correspondem a circuitos abertos.
+Assim da análise do circuito resultam as seguintes expressões:
+
+\begin{equation}
+  I_{out} = \frac{V_{CC} - V_{EB_{ON}} - V_{O_1}}{R_{out}}
+\end{equation}
+
+\begin{equation}
+  V_{EC} = \frac{V_{CC} - V_{EB_{ON}} - V_{O_1}}{R_{out}}
+\end{equation}
+
+\begin{equation}
+  I_{col_2} = \frac{\beta_F}{\beta_F+1}  I_{out}
+\end{equation}
+
+Onde consideramos $V_{EB_{ON}} = 0.7 \: V$ e que $I_{col_2}$ corresponde à corrente que sai do coletor do transistor da \emph{output stage}
+e $I_{out}$ à corrente na resistência $R_{out}$.
+Calculando o \emph{Operating Point} do \emph{Output Stage}, obtemos os valores da tabela (\ref{tab:Teo-OP-OutputStage}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{OP-OutputStage}
+    \end{tabular}
+    \caption{Análise de \emph{Operating Point} - \emph{Output Stage}}
+    \label{tab:Teo-OP-OutputStage}
+\end{table}
+
+Podemos notar que $V_{EC} > V_{EB_{ON}}$ pelo que o transistor PNP está a funcionar na região adequada para o seu funcionamento como 
+amplificador.
+\\
+Por outro lado comparando os valores da tabela (\ref{tab:Teo-OP-OutputStage}) com os obtidos na simulação, tabelados em (\ref{tab:OPSimValues}),
+podemos notar novamente que os valores obtidos pela análise teórica têm a mesma ordem de grandeza dos obtidos pela simulação, apenas
+possuindo pequenos desvios entre si. Tal como anteriormente, as diferença entre os modelos devem-se ao uso de um modelo linear para
+representar o transistor PNP.
+
+
+\subsection{Ganho e Impedâncias Totais e de cada \emph{stage}}
+
+Nesta secção do trabalho começa-se por realizar a análise incremental de cada um dos subcircuitos, calculando-se assim o seu ganho.
+De seguida, determinam-se as impedâncias de \emph{Input} e \emph{Output} de cada um dos andares, o que permitirá por fim calcular a
+impedância de \emph{Input} e de \emph{Output} do circuito.
+
+\subsubsection{Análise Incremental - \emph{Gain Stage}}
+
+Começamos por analisar o circuito sem o efeito do condensador de \emph{bypass}.
+\\
+Os parâmetros do modelo incremental podem ser calculados recorrendo aos valores determinados na análise em \emph{operating point}.
+Estes são dados pelas seguintes relações:
+
+\begin{equation}
+  g_{m} = \frac{I_C}{V_T}
+\end{equation}
+
+\begin{equation}
+  r_{\pi} = \frac{\beta_F}{g_m}
+\end{equation}
+
+\begin{equation}
+  r_o \approx \frac{V_A}{I_C}
+\end{equation}
+
+Onde nas relações anteriores $V_A = 69.7 V$ e $\beta_F = 178.7$ são propriedades do transistor npn utilizado.
+Resolvendo o circuito incremental podemos obter o ganho associado ao \emph{gain stage} que é dado por:
+
+\begin{equation}
+  \frac{v_{o1}}{v_{s}} = \frac{R_B R_C}{R_S + R_B} \frac{R_E - g_m r_{\pi} r_o}{(r_o + R_C + R_E)(R_B || R_S + r_{\pi} + R_E) + g_m R_E r_o r_{\pi} - R_E^2}
+\end{equation}
+
+Incluindo agora o condensador de \emph{bypass} no circuito anterior, sabemos que para frequências médias/altas 
+podemos considerar que o condensador age como um fio ($Z_C = 1/(j \omega C) \approx 0$ para $\omega$ elevados). Isto permite contrariar a 
+diminuição do ganho devida à resistência $R_E$. Assim a expressão anterior reduz-se a:
+
+\begin{equation}
+  \frac{v_{o1}}{v_{s}} = \frac{R_B R_C}{R_S + R_B} \frac{- g_m r_{\pi} r_o}{(r_o + R_C)(R_B || R_S + r_{\pi})}
+\end{equation}
+
+Por fim, recorrendo ao \emph{Octave} determinaram-se os valores em causa recorrendo às expressões anteriores. Estes encontram-se na tabela (\ref{tab:Teo-AC-Gain-Stage}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{AC-GainStage}
+    \end{tabular}
+    \caption{Análise Incremental - \emph{Gain Stage}}
+    \label{tab:Teo-AC-Gain-Stage}
+\end{table}
+
+Podemos verificar que o o ganho quando se utiliza condensador de \emph{bypass} é muito superior ao ganho sem condensador como seria de esperar.
+
+\subsubsection{Análise Incremental - \emph{Output Stage}}
+
+Novamente recorremos ao modelo incremental do circuito onde os parâmetros correspondentes podem ser calculados 
+recorrendo aos valores determinados na análise em \emph{operating point}.
+Neste caso trabalhamos com as admitâncias por coveniência:
+
+\begin{equation}
+  g_{m} = \frac{I_{col2}}{V_A}
+\end{equation}
+
+\begin{equation}
+  g_{\pi} = \frac{1}{r_{\pi}}
+\end{equation}
+
+\begin{equation}
+  g_{E} = \frac{1}{R_{E}}
+\end{equation}
+
+\begin{equation}
+  g_{o} = \frac{1}{r_{o}}
+\end{equation}
+
+Onde nas relações anteriores $V_A = 37.2 V$ e $\beta_F = 227.3$ são propriedades do transistor pnp utilizado.
+Resolvendo o circuito incremental podemos obter o ganho associado ao \emph{gain stage} que é dado por:
+
+\begin{equation}
+  \frac{v_{o_2}}{v_{s}} = \frac{g_m}{g_m + g_{\pi} + g_E + g_o}
+\end{equation}
+
+Por fim, recorrendo ao \emph{Octave} determinaram-se os valores em causa recorrendo às expressões anteriores. Estes encontram-se na tabela (\ref{tab:AC-OutputStage}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{AC-OutputStage}
+    \end{tabular}
+    \caption{Análise Incremental - \emph{Output Stage}}
+    \label{tab:AC-OutputStage}
+\end{table}
+
+\subsubsection{Impedâncias e Ganho Total}
+
+De seguida calculam-se as impedâncias de \emph{input} e \emph{output} associadas ao circuito onde se utilizaram sobrescritos 1 e 2
+para identificar grandezas relativas ao \emph{gain stage} e ao \emph{output stage} respetivamente. \\
+As impedâncias correspondentes à \emph{gain stage} para o caso em que $R_E = 0$ (consideramos o condensador de \emph{bypass} e
+frequências elevadas) são dadas por:
+
+\begin{equation}
+  Z_{I1} = R_B || r_{\pi} = \frac{R_B r_{\pi}}{R_B + r_{\pi}}
+\end{equation}
+
+\begin{equation}
+  Z_{O1} = R_C || r_{o} = \frac{R_C r_{o}}{R_B + r_{o}}
+\end{equation}
+
+Por outro lado as impedâncias de \emph{input} e \emph{output} correspondentes à \emph{output stage} são dadas por:
+
+\begin{equation}
+  Z_{I2} = \frac{g_{\pi_2} + g_{E_2} + g_{o_2} + g_{m_2}}{g_{\pi_2}(g_{\pi_2} + g_{E_2} + g_{o_2})}
+\end{equation}
+
+\begin{equation}
+  Z_{O2} = \frac{1}{g_{\pi_2} + g_{E_2} + g_{o_2} + g_{m_2}}
+\end{equation}
+
+Podemos assim relacionar as impedâncias de \emph{imput} e \emph{output} do circuito, $Z_I$ e $Z_O$, com as impedâncias anteriores
+da seguinte forma:
+
+\begin{equation}
+  Z_I = Z_{I_1}
+\end{equation}
+
+\begin{equation}
+  Z_O = \frac{1}{g_{o_2} + g_{m_2} + \frac{r_{\pi_2}}{r_{\pi_2} + Z_{o_1}} + g_{E_2} + \frac{1}{r_{\pi_2} + Z_{O_1}}}
+\end{equation}
+
+Aproveitamos ainda para calcular o ganho total associado ao circuito:
+
+\begin{equation}
+  \frac{v_{out}}{v_{s}} = \frac{\frac{1}{r_{\pi_2} + Z_{o_1}} + \frac{g_{m_2} r_{\pi_2}}{r_{\pi_2} + Z_{o_1}}}{\frac{1}{r_{\pi_2} + Z_{o_1}} + \frac{1}{R_{out}} + \frac{1}{r_{o_2} + \frac{g_{m_2} r_{\pi_2}}{r_{\pi_2} + Z_{o_1}}} } A_1
+\end{equation}
+
+Onde $A_1$ é o ganho associado à \emph{gain stage}. \\
+Por fim apresentam-se os valores destas grandezas para o circuito simulado na tabela (\ref{tab:Teo-Impedancias}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantity} & {\bf Value} \\ \hline
+    \input{Impedances}
+    \end{tabular}
+    \caption{Ganho Total e Impedâncias do \emph{Gain Stage}, do \emph{Output Stage} e Totais}
+    \label{tab:Teo-Impedancias}
+\end{table}
+
+Verifica-se que a impedância de \emph{input} do circuito é elevada e que a impedância de \emph{output} do circuito é da mesma ordem de grandeza
+que a impedância da \emph{load} o que corresponde à situação ideal.
+\\
+Podemos também notar que a \emph{gain stage} e a \emph{output stage} podem ser ligadas sem perda significativa de sinal dado que a impedância
+de \emph{output} da \emph{gain stage} é muito menor do que a impedância de \emph{input} da \emph{outputstage} pelo que o sinal 
+do primeiro andar é transmitido quase na totalidade ao segundo andar.
+\\
+Por último podemos verificar que as grandezas da tabela (\ref{tab:Teo-Impedancias}) que foram calculadas pela via teórica
+estão na mesma ordem de grandeza que os valores obtidos através da simulação, ver tabela (\ref{tab:ACSimValues}), sendo que como já foi
+mencionado anteriormente, a diferença entre ambas se deve dever à não lineariedade dos transistores (o \emph{Ngspice} utiliza um modelo mais
+realista do transistor) e à aproximação dos condensadores a fios (que apesar de tudo deverá ser bastante precisa para médias/elevadas frequências).
+
+\subsection{\emph{Frequency Response}}
+
+Nesta secção faz-se uma análise no domínio das frequências do ganho da voltagem de \emph{output} da \emph{gain stage} e do circuito completo.
+\\
+Para tal, resolveu-se o modelo incremental do circuito, ilustrado na Figura (\ref{fig:FrequencyResponseCircuitoIncremental}) utilizando o método dos nós.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.38]{T4IncCircuit.pdf}
+    \caption{\emph{Frequency Response} - Circuito Incremental}
+    \label{fig:FrequencyResponseCircuitoIncremental}
+\end{figure}
+
+O sistema de equações obtidos em forma matricial é dado por:
+
+\begin{equation}
+\resizebox{.9\hsize}{!}
+{$
+\begin{bmatrix}
+    1 & 0 & 0 & 0 & 0 & 0 & 0\\
+    -\frac{1}{R_S} & \frac{1}{R_S} + j \omega C_I & - j \omega C_I & 0 & 0 & 0 & 0\\
+    0 & - j \omega C_I & j \omega C_I + \frac{1}{R_{B}} + \frac{1}{r_{\pi_1}} & - \frac{1}{r_{\pi_1}} & 0 & 0 & 0\\
+    0 & 0 & -\frac{1}{r_{\pi_1}} - g_{m_1} & \frac{R_E + r_{\pi_1}}{r_{\pi_1} R_E} + \frac{1}{r_{o1}} + g_{m_1} + j \omega C_E & - \frac{1}{r_{o_1}} & 0 & 0\\
+    0 & 0 & g_{m_1} & - g_{m_1} - \frac{1}{r_{o_1}} & \frac{1}{R_C} + \frac{1}{r_{o_1}} + \frac{1}{r_{\pi_2}} & -\frac{1}{r_{\pi_2}} & 0\\
+    0 & 0 & 0 & g_{m_2} & -g_{m_1} - \frac{1}{r_{\pi}} & \frac{1}{r_{o_2}} + \frac{1}{r_{\pi_2}} + \frac{1}{R_{out}} + j \omega C_{out}  & - j \omega C_{out} \\ 
+    0 & 0 & 0 & 0 & 0 & -j \omega C_{out} & j \omega C_{out} + \frac{1}{R_2} \\
+\end{bmatrix}
+\begin{bmatrix}
+  \widetilde{v_1}\\
+  \widetilde{v_2}\\
+  \widetilde{v_3}\\
+  \widetilde{v_5}\\
+  \widetilde{v_6}\\
+  \widetilde{v_7}
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \widetilde{v_s}\\
+  0\\
+  0\\
+  0\\
+  0\\
+  0\\
+  0
+\end{bmatrix}
+$}
+\end{equation}
+
+Onde $\widetilde{v_S} = 10 e^{-\frac{\pi}{2}} \: mV$. Assim resolvendo o sistema matricial anterior de forma simbólica no \emph{Octave}
+obtiveram-se as voltagens nodais como funções da frequência, $f$, em Hz. Isto permitiu fazer \emph{plot's} da magnitude e da fase 
+da função de transferência da voltagem de saída do \emph{gain stage} ($T_1(\omega) = \frac{\widetilde{V}_{o_1}}{\widetilde{V}_{S}} = \frac{\widetilde{V}_{5}}{\widetilde{V}_{S}} $)
+e da voltagem nos terminais da \emph{load} ($T_1(\omega) = \frac{\widetilde{V}_{out}}{\widetilde{V}_{S}} = \frac{\widetilde{V}_{7}}{\widetilde{V}_{S}}$).
+\\
+Os gráficos em causa apresentam-se de seguida onde as amplitudes estão representadas em dB e as fases em graus.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.38]{FrequencyResponseMagGainStage.eps}
+    \includegraphics[scale=0.38]{FrequencyResponsePhaseGainStage.eps}
+    \caption{\emph{Frequency Response} - Magnitude (dB) e Fase (º) da Função de Transferência do Output da \emph{Gain Stage} - $T_1(\omega)$}
+    \label{fig:FrequencyResponseAnaGainStage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.38]{FrequencyResponseMagOutput.eps}
+    \includegraphics[scale=0.38]{FrequencyResponsePhaseOutput.eps}
+    \caption{\emph{Frequency Response} - Magnitude (dB) e Fase (º) da Função de Transferência do Output na \emph{Load} - $T_2(\omega)$}
+    \label{fig:FrequencyResponseAnaOutput}
+\end{figure}
+
+Os gráficos anteriores são semelhantes em alguns aspetos aos produzidos pela simulação (ver Figuras (\ref{fig:ACASimMag}) e (\ref{fig:ACASimPha})).
+Nos gráficos de magnitude as ordens de grandeza do ganho são bastante semelhantes e o comportamento do gráfico é semelhante até cerca de $f \approx 10^6 Hz$
+onde deverá existir um polo na função de transferência que causa uma diminuição do ganho. 
+\\
+Os gráficos de fase apresentam comportamentos muito distintos não sendo comparáveis.
+\\
+Estas diferenças dever-se-ão fundamentalmente à simplicidade do modelo teórico utilizado na descrição do transistor nomeadamente dado que 
+não parece existir nenhum polo no modelo teórico utilizado que justificasse a diminuição do ganho para altas frequências.
+\\
+Esta análise permite concluir que apesar do modelo teórico simplificado oferecer boas aproximações para o estudo de circuitos com transistores
+poderá ser necessário recorrer a simulações numéricas quando for desejável efetuar um estudo mais cuidado.

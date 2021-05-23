@@ -1,0 +1,166 @@
+\section{Simulação do Circuito}
+\label{sec:simulation}
+
+Nesta secção, fez-se a simulação do circuito de amplificador de audio, ilustrado no figura (\ref{fig:Circuito}),
+através de um \emph{Script} de \emph{Ngspice}.
+\\
+Para este relatório, podemos separar a simulação em três partes: o cálculo do \emph{Operating Point} da
+parte DC do circuito; a análise transiente do circuito durante $10 \: ms$ para um sinal de frequência de 
+$f = 1 \: kHz$; e uma análise AC do circuito, de modo a estudar a resposta do circuito a frequências entre
+os $10 \:Hz$ e os $100 \: MHz$.
+\\
+Também se procurou comentar acerca do propósito e efeito de alguns dos componentes no ganho e na banda de passagem.
+Na parte final desta secção, realizou-se o cálculo do mérito do circuito.
+
+
+\subsection{Operating Point: Parte DC do Circuito}
+
+Começou-se por fazer a simulação da parte DC do amplificador de audio. Os objetivos desta parte consistem em garantir
+que os dois transistors operam na \emph{Foward Active Region (F.A.R.)} e na recolha de valores para a comparação
+com os obtidos na análise teórica realizada na secção (\ref{sec:analysis}).
+As grandezas obtidas através do \emph{Operating Point} estão então apresentadas na seguinte tabela:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|r|}
+  \hline    
+  {\bf Grandeza} & {\bf Valor [V, A, $\Omega$]} \\ \hline
+  \input{OP_tab}
+  \end{tabular}
+  \caption{Operating Point: Parte DC do cirtuito}
+  \label{tab:OPSimValues}
+\end{table}
+
+Por observação dos valores apresentados na tabela (\ref{tab:OPSimValues}) verifica-se que os dois 
+transistores estão a operar na \emph{F.A.R}, uma vez que $V_{CE} > V_{BE}$ no caso do transistor NPN e 
+$V_{EC} > V_{EB}$ no caso do PNP.
+
+
+\subsection{Transient Analysis: Simulação do Circuito}
+
+Nesta secção simularam-se $10 \: ms$ do circuito de modo a observar o efeito do amplificador de audio para um
+sinal sinusoidal de frequência $f = 1 \: kHz$, com uma amplitude de $V_S = 10 \: mV$. Com este objetivo em
+mente, fizeram-se \emph{plot}'s do sinal medido nos terminais da fonte de input, $v_{s}$, e nos terminais
+do altifalante, $v_{out}$, ilustrados na figura (\ref{fig:TASimSignal}):
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{vin_vout.pdf}
+  \caption{Transient Analysis: Efeito do Amplificador de Audio - \emph{Plot} da tensão AC de: entrada, $v_s$, e saída, $v_{out}$, do circuito}
+  \label{fig:TASimSignal}
+\end{figure}
+
+Por observação dos gráficos, verifica-se que ocorreu uma amplificação do sinal original, tal como esperado,
+embora tenham ocorrido pequenas distorções no sinal do tipo \emph{Audio Clipping}, ou seja, "cortes" na parte superior do sinal.
+\\
+Isto deve-se ao facto de o amplificador não ser capaz de gerar voltagem ou corrente suficiente para reproduzir
+o sinal original para o altifalante $R_L$. No entanto, optámos por manter
+estas distorções, que não são muito significativas (a parte do sinal cortada é pequena em comparação com a
+amplitude do sinal), em troca de podermos aumentar a banda de passagem de modo a incluir frequências a partir dos
+$20 \: Hz$.
+\\
+Verificamos que a amplitude do sinal no altifalante é aproximadamente $70$ vezes superior à do sinal original e também podemos 
+notar que os dois sinais estão desfazados de $\pi$ rad, uma vez que o circuito é composto por um
+\emph{Inverting Amplifier} (\emph{gain stage}) que, como o nome indica, inverte o sinal. Estes resultados são consistentes com
+a \emph{Frequency Response} que se fez na \emph{AC Analysis}, que mostraremos de seguida.
+
+
+\subsection{AC Analysis - Frequency Response: Frequências entre $10$ Hz e $100$ MHz}
+
+Finalmente, realizou-se uma \emph{Frequency Response Analysis}, que permitiu obter gráficos da magnitude e da fase das funções de transferência
+das voltagens nos terminais do \emph{Gain Stage} e da \emph{Output Stage} em função da frequência do sinal de
+\emph{Input}. Os gráficos em questão estão apresentados nas seguintes imagens:
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{freq_resp_mag.pdf}
+  \caption{AC Analysis: \emph{Magnitude Frequency Response}}
+  \label{fig:ACASimMag}
+\end{figure}
+
+\begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{freq_resp_pha.pdf}
+  \caption{AC Analysis: \emph{Phase Frequency Response}}
+  \label{fig:ACASimPha}
+\end{figure}
+
+Através da análise dos gráficos, retiraram-se as grandezas presentes na tabela (\ref{tab:ACSimValues}), que
+incluem as frequências de corte, o ganho de voltagem a banda de passagem e as impedâncias.
+\\
+Para medir as impedâncias de \emph{Input} e de \emph{Output}, usaram-se as seguintes configurações do nosso circuito:
+Para a impedância de input, manteve-se o circuito original e calculou-se a impedância como o módulo da razão entre
+a voltagem e corrente no nó $in$; Para a impedância de de \emph{Output}, retirou-se a fonte $v_{in}$ e substituiu-se
+a resistência $R_L$ por uma fonte alternada $v_{out}$, medindo a impedância como o módulo da razão entre a voltagem
+e corrente no nó $out$.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|r|}
+  \hline    
+  {\bf Grandeza} & {\bf Valor [V, A, $\Omega$]} \\ \hline
+  \input{AC1_tab}
+  \input{AC2_tab}
+  \end{tabular}
+  \caption{AC Analysis: Grandezas Retiradas}
+  \label{tab:ACSimValues}
+\end{table}
+
+Podemos concluir por observação do gráfico (\ref{fig:ACASimMag}) e pelos valores na tabela (\ref{tab:ACSimValues}),
+que o amplificador de audio funciona, uma vez que a banda de passagem inclui o espetro de frequências detetáveis
+pelo ouvido humano ($20 Hz$ a $20000 Hz$) e o ganho de voltagem na banda de passagem é grande, cerca de $37 \: dB
+\approx 70$, que confirma o resultado obtido na subsecção anterior.
+
+
+\subsection{Efeito de Componentes no Ganho e Banda de Passagem}
+
+\subsubsection{Condensadores de Acoplamento}
+
+Os condensadores de acoplamento, $C_i$ e $C_o$, permitem a passagem da componente AC do sinal, bloqueando a parte DC
+do sinal, que não é desejada, uma vez que esta pode  introduzir ruído ou distorções no sinal amplificado. Isto deve-se
+ao facto de um condensador ter uma impedância ($Z_C = 1 / (j \omega C)$) elevada para sinais de frequência baixa
+(componente DC), pelo que permite a passagem dos mesmos. Por outro lado, a impedância de um condensador é baixa para sinais de
+alta frequência (componente AC), pelo que este comporta-se como um curto circuito.
+\\
+Por estas razões, verificou-se na execução da simulação que um aumento na capacitância dos condensadores de acoplamento (que dimínui $Z_C$)
+resulta numa diminuição da \emph{Lower Cut Off Frequency} aumentando assim a banda de passagem.
+
+\subsubsection{Condensador de \emph{Bypass}}
+
+A resistência $R_E$ tem como propósito a estabilização da componente DC (regime de \emph{operating point}) tendo no entanto como 
+desvantagem o facto de resultar num \emph{voltage drop} que diminuí o ganho de amplificação do sinal por parte da \emph{gain stage}.
+\\
+Assim o condensador de \emph{bypass} colocado em paralelo com a resistência $R_E$ tem como objetivo o aumento e estabilização do ganho
+para frequências médias/elevadas. Isto deve-se ao facto de que nestas regiões de frequência a impedância do condensador é baixa 
+($Z_C = 1/(j \omega C))$, ou seja, o condensador comporta-se como um fio, sendo a diferença de potencial entre os seus terminais nula (não há
+\emph{voltage drop}) o que resulta num aumento do ganho.
+\\
+Deste modo, verificou-se na execução da simulação que um aumento na capacitância dos condensadores de \emph{Bypass} (diminuição de $Z_C$) 
+resulta num aumento do ganho de voltagem no sinal de \emph{Output}.
+
+\subsubsection{Resistência do Coletor}
+
+A resistência $R_C$ permite aumentar o ganho da voltagem de \emph{output} (quanto maior a resistência $R_C$ maior o ganho).
+
+\subsection{Cálculo da Figura do Mérito}
+
+A fórmula utilizada para o cálculo do mérito é dada pela expressão (\ref{eq:Merito}).
+
+\begin{equation}
+    M = \frac{\textnormal{voltage gain} * \textnormal{bandwidth}}{\textnormal{cost} * \textnormal{lowerCutoffFreq}}
+    \label{eq:Merito}
+\end{equation}
+
+No circuito desenvolvido neste trabalho utilizaram-se: 2 transistores, 3 condensadores (a soma das capacitâncias é $\sum C = 5.9\: mF$) 
+e 5 resistências (a soma das resistências é $\sum R = 101.3 \: k\Omega$). 
+Assim o custo associado a este circuito (nas unidades monetárias adotadas) é de:
+
+\begin{equation}
+  \label{eq:Custo}
+  \textnormal{cost} = 2 \times 0.1 + 5.9 \times 1000 + 101.3 \times 1 = 6001.5 MU 
+\end{equation}
+
+Considerando o valor do custo, e os restantes valores da fórmula de mérito obtidos através da tabela (\ref{tab:ACSimValues})
+podemos calcular o mérito deste trabalho obtendo-se:
+
+\begin{equation}
+  \label{eq:ValorMerito}
+  M = 7359.21347
+\end{equation}
