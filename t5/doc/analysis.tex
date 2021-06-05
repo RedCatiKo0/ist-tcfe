@@ -1,0 +1,145 @@
+\section{Análise Teórica}
+\label{sec:analysis}
+
+
+\subsection{Cálculo do Ganho e da Frequência Central}
+
+Na análise teórica consideramos o circuito simplificado ilustrado na figura (\ref{fig:CircuitoSimplificado}) onde se consideram as impedâncias: 
+$Z_1 = R_1 + \frac{1}{j \omega C_1}$, $Z_2 = R_2 \parallel \frac{1}{j \omega C_2}$, $Z_a = R_a$ e $Z_b = R_b$.
+
+\begin{figure}[H] \centering
+    \includegraphics[width=0.9\linewidth]{t5circuitimpedances.pdf}
+    \caption{Modelo Simplificado do Circuito}
+    \label{fig:CircuitoSimplificado}
+\end{figure}
+
+Tendo em conta o teorema da sobreposição podemos escrever as voltagens nos nós 2 e 4 tendo em conta os efeitos individuais de $V_{in}$ e $V_{out}$. 
+Obtém-se as seguintes relações:
+
+\begin{equation}
+    \widetilde{V}_2 = \frac{Z_2}{Z_1 + Z_2} \widetilde{V}_{in} + \frac{Z_1}{Z_1 + Z_2} \widetilde{V}_{out}
+\end{equation}
+
+\begin{equation}
+    \widetilde{V}_4 = \frac{Z_a}{Z_a + Z_b} \widetilde{V}_{out}
+\end{equation}
+
+Considerando o modelo ideal do \emph{OpAmp} podemos ter em conta a aproximação $\widetilde{V}_2 \approx \widetilde{V}_4$ obtemos:
+
+\begin{equation}
+    \frac{\widetilde{V}_{out}}{\widetilde{V}_{in}} = \frac{\frac{Z_2}{Z_1 + Z_2}}{\frac{Z_a}{Z_a + Z_b} - \frac{Z_1}{Z_1 + Z_2}} = \frac{Z_2(Z_a + Z_b)}{Z_a(Z_1 + Z_2) - Z_1(Z_a + Z_b)}
+    \label{eq:Ganho}
+\end{equation}
+
+O módulo do polo da função de transferência corresponderá à frequência central. Assim esta pode ser obtida resolvendo a equação:
+
+\begin{equation}
+    Z_a (Z_1(f) + Z_2(f)) - Z_1(f) (Z_a + Z_b) = 0 
+\end{equation}
+
+\subsection{Cálculo da Impedância de \emph{Input}}
+
+Para calcular a impedância de \emph{input}, $Z_I$, considera-se que não existe \emph{load}, ou seja, $R_{load} = +\infty$.
+Assim a impedância de \emph{input} é definida como:
+
+\begin{equation}
+    Z_I = \frac{\widetilde{V}_{in}}{\widetilde{I}_{in}}
+\end{equation}
+
+Onde $\widetilde{V}_{in}$ é a tensão e $\widetilde{I}_{in}$ a corrente à entrada do circuito.
+Tendo em conta as definições para os nós utilizadas anteriormente temos que $\widetilde{V}_1 = \widetilde{V}_{in}$. Aplicamos a Lei de Kirchhoff
+das correntes nos nós 2 e 4 obtendo as equações:
+
+\begin{equation}
+    \frac{\widetilde{V}_2 - \widetilde{V}_1}{Z_1} + \frac{\widetilde{V}_2 - \widetilde{V}_3}{Z_2} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\widetilde{V}_4 - 0}{Z_a} + \frac{\widetilde{V}_4 - \widetilde{V}_3}{Z_b} = 0
+\end{equation}
+
+Consideramos novamente a aproximação ideal do \emph{OpAmp}:
+
+\begin{equation}
+    \widetilde{V}_2 \approx \widetilde{V}_4
+\end{equation}
+
+Resolvendo as equações anteriores obtemos:
+
+\begin{equation}
+    \widetilde{V}_2 = \frac{\widetilde{V}_1}{Z_1 (\frac{1}{Z_1} + \frac{1}{Z_2} - \frac{Z_b}{Z_2}(\frac{1}{Z_a} + \frac{1}{Z_b}))}
+\end{equation}
+
+Assim podemos calcular analiticamente a impedância de \emph{input}:
+
+\begin{equation}
+    Z_I = \frac{\widetilde{V}_1}{\frac{\widetilde{V_1} - \widetilde{V_2}}{Z_1}} = \frac{1}{\frac{1}{Z_1} \left(1 - \frac{1}{Z_1 \left(\frac{1}{Z_1} + \frac{1}{Z_2} - \frac{Z_b}{Z_2}\left(\frac{1}{Z_a} + \frac{1}{Z_b}\right)\right)}\right)}
+    \label{eq:ImpedanciaInput}
+\end{equation}
+
+\subsection{Cálculo da Impedância de \emph{Output}}
+
+Para calcular a impedância de \emph{output}, $Z_O$, consideramos $V_{in} = 0$. Assim a $Z_O$ é dada pela seguinte expressão:
+
+\begin{equation}
+    Z_O = \frac{\widetilde{V}_{out}}{\widetilde{I}_{out}}
+\end{equation}
+
+Onde $\widetilde{V}_{out}$ é a tensão de \emph{output} e $\widetilde{I}_{out}$ a corrente que vem na direção da \emph{load} para o circuito pelo nó 3.
+\\
+Se considerarmos o modelo ideal do \emph{OpAmp} a sua impedância de \emph{output} é $0 \: \Omega$. Ou seja, se considerarmos o modelo ideal,
+a impedância de \emph{output} do circuito é $Z_O = 0 \: \Omega$ já que toda a corrente $I_{out}$ flui pelo terminal de saída do \emph{OpAmp} como num
+curto-circuito. Assim:
+
+\begin{equation}
+    Z_O = 0
+    \label{eq:ImpedanciaOutput}
+\end{equation}
+
+\subsection{Resultados Obtidos}
+
+De seguida apresentam-se todos os resultados obtidos na análise teórica na tabela (\ref{tab:Teo}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Quantidade} & {\bf Valor} \\ \hline
+    \input{TeoAnalysis}
+    \end{tabular}
+    \caption{Valores Obtidos Teoricamente - Frequência Central, Ganho, Impedâncias de Saída e Entrada}
+    \label{tab:Teo}
+\end{table}
+
+Podemos verificar que de forma geral os resultados obtidos são semelhantes aos da simulação do \emph{Ngspice} - ver tabela (\ref{tab:SimValues}). 
+O ganho na frequência central e a impedância de \emph{input} determinados através da simulação e da análise teórica apresentam 
+valores muito semelhantes, diferindo apenas no valor decimal. Por outro lado a frequência central calculada teoricamente
+apresenta um desvio um pouco superior de 3.26\% que apesar de ser notável não deixa de ser marginal.
+\\
+Todos estes valores parecem indicar que o modelo linear do \emph{OpAmp} é muito adequado pelo que permite obter valores muito semelhantes aos da
+simulação.
+\\
+No entanto verifica-se um erro de 100\% no que toca à impedância de \emph{output}. Isto resulta do facto de no modelo ideal utilizado na análise teórica
+se considerar que a impedância de \emph{output} do \emph{OpAmp} é $Z = 0$ de onde resulta que a impedância de \emph{output} do circuito total
+tem de ser 0. Assim não é possível determinar um valor mais exato da impedância de \emph{output} do circuito utilizando o modelo ideal mas
+podemos notar que o valor obtido através da simulação é bastante baixo como seria de esperar (e como é aliás desejável).
+
+
+\subsection{\emph{Frequency Response}}
+
+Nesta subsecção do trabalho fizeram-se \emph{plot's} referentes à função de transferência (ganho) - ver expressão (\ref{eq:Ganho}).
+Apresenta-se de seguida o gráfico correspondente à magnitude da função de transferência em dB e o correspondente à
+fase da função de transferência em graus - figura (\ref{fig:FrequencyResponseAna}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.38]{FrequencyResponseMag.eps}
+    \includegraphics[scale=0.38]{FrequencyResponsePhase.eps}
+    \caption{\emph{Frequency Response} - Ganho (Esquerda) e Fase (Direita)}
+    \label{fig:FrequencyResponseAna}
+\end{figure}
+
+Comparando os gráficos obtidos pelo modelo teórico com os que apresentámos na secção da simulação, figura (\ref{fig:SimFR}) da secção
+(\ref{sec:simulation}), podemos observar que para frequências relativamente próximas da frequência central, entre os $10 \: Hz$ e os
+$10^5 \: Hz$, os gráficos são idênticos. No entanto, a partir de frequências mais elevadas de $\approx 10^5 \: Hz$, o nosso modelo linear
+usado na análise teórica não consegue descrever bem o circuito com o modelo mais complexo do \emph{Ngspice}, pelo que os gráficos diferem.

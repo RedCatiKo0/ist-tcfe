@@ -1,0 +1,83 @@
+\section{Simulação do Circuito}
+\label{sec:simulation}
+
+Nesta secção, fez-se a simulação do circuito de \emph{bandpass filter}, ilustrado na figura (\ref{fig:Circuito}),
+através de um \emph{script} de \emph{Ngspice}.
+\\
+O esquema do circuito foi simplificado uma vez que se representaram resistências/condensadores em paralelo/série
+como um/a única/o resistência/condensador equivalente. Deste modo, os componentes reais usados foram:
+
+\begin{itemize}
+    \item $R_1 = \frac{1}{\frac{1}{1} + \frac{1}{1}} \: k\Omega = 0.5 \: k\Omega$, ou duas resistências em paralelo de $1 \: k\Omega$;
+    \item $R_2 = 1 k\Omega$;
+    \item $R_a = \frac{1}{\frac{1}{100} + \frac{1}{100} + \frac{1}{100} + \frac{1}{10}} \: k\Omega \approx 7.69 \: k\Omega$, ou quatro resistências
+    em paralelo, três de $100 \: k\Omega$ e uma de $10 \: k\Omega$;
+    \item $R_b = \frac{1}{\frac{1}{10} + \frac{1}{10}} \: k\Omega = 5 \: k\Omega$, ou duas resistências de $10 \: k\Omega$ em paralelo;
+    \item $C_1 = C_2 = 220 \: nF$.
+\end{itemize}
+
+
+\subsection{Análise AC}
+
+Efetuou-se uma análise AC do circuito, de modo a estudar a resposta do circuito a frequências entre os $10 \:Hz$ e
+os $100 \: MHz$, que permitiu obter gráficos da magnitude e da fase das funções de transferência das voltagens nos
+terminais do \emph{bandpass filter} em função da frequência do sinal de \emph{input}. Os gráficos em questão estão
+apresentados nas seguintes imagens:
+
+\begin{figure}[H] \centering
+    \includegraphics[scale=0.35]{simgain.pdf}
+    \includegraphics[scale=0.35]{simphase.pdf}
+    \caption{\emph{Frequency Response} - Ganho (Esquerda) e Fase (Direita)}
+    \label{fig:SimFR}
+\end{figure}
+
+Através da análise dos gráficos, retiraram-se as grandezas presentes na tabela (\ref{tab:SimValues}), que
+incluem a frequência central e o respetivo ganho de voltagem e as impedâncias de \emph{input} e \emph{onput}.
+\\
+Para medir as impedâncias de \emph{input} e de \emph{output} usaram-se as seguintes configurações do nosso circuito:
+Para a impedância de \emph{input}, manteve-se o circuito original, retirando a resistência $R_L$, e calculou-se
+a impedância como o módulo da razão entre a voltagem e corrente no nó $in$; Para a impedância de de \emph{output},
+retirou-se a fonte $v_{in}$ e substituiu-se a resistência $R_L$ por uma fonte alternada $v_{out}$, medindo a impedância
+como o módulo da razão entre a voltagem e corrente no nó $out$.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Grandeza} & {\bf Valor [Hz, dB, $\Omega$]} \\ \hline
+    \input{simfr_tab.tex}
+    \input{simzi_tab.tex}
+    \input{simzo_tab.tex}
+    \end{tabular}
+    \caption{Frequency Responce: Central Frequency, Gain, Input and Output Impedances}
+    \label{tab:SimValues}
+\end{table}
+
+
+\subsection{Cálculo do Mérito}
+
+A fórmula utilizada para o cálculo do mérito é dada pela expressão (\ref{eq:Merito}).
+
+\begin{equation}
+    M = \frac{1}{\textnormal{cost} \times \textnormal{gain deviation} \times \textnormal{central frequency deviation}}
+    \label{eq:Merito}
+\end{equation}
+
+No circuito desenvolvido neste trabalho utilizaram-se: um \emph{OP-AMP}, constituido por 2 transistores, 2 condensadores e
+9 resistências (cujo custo total será $\approx 146 \: MU$); 2 condensadores (cuja soma das capacitâncias é $\sum C = 0.440 \: \mu F$);
+e 10 resistências (cuja soma das resistências é $\sum R \approx 333 \: k\Omega$).
+\\
+Assim o custo associado a este circuito (nas unidades monetárias adotadas) é de:
+
+\begin{equation}
+  \label{eq:Custo}
+  \textnormal{cost} \approx 479 MU
+\end{equation}
+
+Considerando o valor do custo, e os restantes valores da fórmula de mérito obtidos através da tabela (\ref{tab:SimValues})
+podemos calcular o mérito deste trabalho obtendo-se:
+
+\begin{equation}
+  \label{eq:ValorMerito}
+  M \approx 2.92 \times 10^{- 6}
+\end{equation}
