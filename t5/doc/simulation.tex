@@ -59,11 +59,11 @@ como o módulo da razão entre a voltagem e corrente no nó $out$.
 A fórmula utilizada para o cálculo do mérito é dada pela expressão (\ref{eq:Merito}).
 
 \begin{equation}
-    M = \frac{1}{\textnormal{cost} \times \textnormal{gain deviation} \times \textnormal{central frequency deviation}}
+    M = \frac{1}{\textnormal{cost} \times (\textnormal{gain deviation} + \textnormal{central frequency deviation} + 10^{- 6})}
     \label{eq:Merito}
 \end{equation}
 
-No circuito desenvolvido neste trabalho utilizaram-se: um \emph{OP-AMP}, constituido por 2 transistores, 2 condensadores e
+No circuito desenvolvido neste trabalho utilizaram-se: um \emph{OP-AMP}, constituido por 2 transistores, 5 díodos, 2 condensadores e
 9 resistências (cujo custo total será $\approx 146 \: MU$); 2 condensadores (cuja soma das capacitâncias é $\sum C = 0.440 \: \mu F$);
 e 10 resistências (cuja soma das resistências é $\sum R \approx 333 \: k\Omega$).
 \\
@@ -79,5 +79,5 @@ podemos calcular o mérito deste trabalho obtendo-se:
 
 \begin{equation}
   \label{eq:ValorMerito}
-  M \approx 2.92 \times 10^{- 6}
+  M \approx 2.00 \times 10^{- 4}
 \end{equation}
